@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>DOT 節點查詢工具</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/@hpcc-js/wasm@2.20.0/dist/graphviz.umd.js"></script>
+  <script src="https://unpkg.com/d3-graphviz@5.6.0/build/d3-graphviz.js"></script>
+  <script src="https://dagrejs.github.io/project/graphlib-dot/latest/graphlib-dot.min.js"></script>
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; overflow: hidden; }
+    #leftPane { width: 25%; padding: 20px; box-sizing: border-box; background: #f5f5f5; overflow-y: auto; border-right: 1px solid #ccc; }
+    #rightPane { width: 75%; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+    textarea { width: 100%; height: 200px; font-family: monospace; }
+    input, button { margin: 5px 5px 5px 0; }
+    #results { margin-top: 20px; height: 200px; overflow-y: auto; background: #f9f9f9; border: 1px solid #ccc; padding: 10px; white-space: pre-wrap; font-family: monospace; }
+    #svgOutput { width: 100%; height: 400px; border: 1px solid #aaa; padding: 10px; background: #fff; overflow: auto; box-sizing: border-box; }
+    #svgOutput svg { width: 100%; height: 100%; display: block; }
+    a { color: blue; text-decoration: underline; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div id="leftPane">
+    <h2>DOT 輸入</h2>
+    <textarea id="dotInput">digraph {
+  a1->b1
+  a2->b1
+  a3->b1
+
+  b1->c1
+  b2->c1
+  b3->c1
+
+  c1->d1
+  c2->d1
+  c3->d1
+
+  b1->x
+  b1->y
+  c1->x
+  c1->z
+  d1->y
+  d1->z
+}</textarea>
+
+    <h3>查詢節點</h3>
+    <input type="text" id="nodeInput" placeholder="請輸入節點名稱">
+    <br>
+    <input type="number" id="upDepth" value="1" min="1" style="width: 150px;">
+    <button onclick="findUpLayers()">找出向上層的節點與路徑</button>
+    <br>
+    <input type="number" id="downDepth" value="1" min="1" style="width: 150px;">
+    <button onclick="findDownLayers()">找出向下層的節點與路徑</button>
+
+    <hr>
+
+    <h3>查詢所有路徑</h3>
+    起點Node<input type="text" id="pathStart" placeholder="起點節點" style="width:120px;"><br>
+    終點Node<input type="text" id="pathEnd" placeholder="終點節點" style="width:120px;"><br>
+    最大hop數<input type="number" id="maxHop" value="6" min="1" style="width:120px;">
+    <button onclick="findAllPaths()">找出所有路徑</button>
+  </div>
+
+  <div id="rightPane">
+    <h3>路徑</h3>
+    <div id="svgOutput"></div>
+
+    <h3>文字結果顯示 (results)</h3>
+    <button onclick="clearMessages()">清除訊息</button>
+    <div id="results"></div>
+  </div>
+
+  <script>
+    let graph;
+
+    function parseDot() {
+      const dotText = document.getElementById("dotInput").value;
+      try {
+        graph = graphlibDot.read(dotText);
+        return true;
+      } catch (e) {
+        addMessage("❌ DOT 解析錯誤: " + e.message);
+        return false;
+      }
+    }
+
+    function getNodeInput() {
+      const node = document.getElementById("nodeInput").value.trim();
+      if (!graph.hasNode(node)) {
+        addMessage(`節點 "${node}" 不存在於圖中`);
+        return null;
+      }
+      return node;
+    }
+
+    function clearMessages() {
+      document.getElementById("results").textContent = "";
+      document.getElementById("svgOutput").innerHTML = "";
+    }
+
+    function addMessage(msg) {
+      const results = document.getElementById("results");
+      results.innerHTML += msg + "<br>";
+      results.scrollTop = results.scrollHeight;
+    }
+
+// 補充：將屬性物件轉為 DOT attribute 字串，如 {color:"red", shape:"box"} => '[color="red" shape="box"]'
+function attrsToDot(attrs) {
+  if (!attrs) return "";
+  const parts = [];
+  for (const [key, value] of Object.entries(attrs)) {
+    if (typeof value === "boolean") {
+      if (value) parts.push(key);
+    } else if (typeof value === "string") {
+      // 如果字串包含空白或特殊字元，用雙引號包起來
+      const v = /\s/.test(value) ? `"${value}"` : value;
+      parts.push(`${key}=${v}`);
+    } else {
+      parts.push(`${key}=${value}`);
+    }
+  }
+  return parts.length > 0 ?  ` [${parts.join(" ")}]` : "";
+}
+
+// 修改 createPayloadFromPath，額外取得節點與邊屬性
+function createPayloadFromPath(path, isUp = false) {
+  const rawIndexList = isUp ? path.map((_, i) => 0 - i) : path.map((_, i) => i);
+  const nodesWithIdx = path.map((node, i) => ({ node, rawIdx: rawIndexList[i] }));
+  nodesWithIdx.sort((a, b) => a.rawIdx - b.rawIdx);
+
+  const sortedNodes = nodesWithIdx.map(x => x.node);
+  const normalizedIndexList = sortedNodes.map((_, i) => i);
+
+  // 產生 edges
+  const edges = [];
+  for (let i = 0; i < sortedNodes.length -1; i++) {
+    edges.push({
+      source: sortedNodes[i],
+      target: sortedNodes[i + 1],
+      index: i
+    });
+  }
+
+  // 抓節點屬性
+  const nodeAttrs = {};
+  for (const n of sortedNodes) {
+    nodeAttrs[n] = graph.node(n) || {};
+  }
+
+  // 抓邊屬性 (Graphlib edge 查詢用 v,w)
+  const edgeAttrs = {};
+  for (const e of edges) {
+    // graph.edge({v: source, w: target})
+    const attr = graph.edge({v: e.source, w: e.target}) || {};
+    edgeAttrs[`${e.source}->${e.target}`] = attr;
+  }
+
+  return {
+    nodes: sortedNodes,
+    edges,
+    indexList: normalizedIndexList,
+    originalNodes: path,
+    originalIndexList: rawIndexList,
+    nodeAttrs,
+    edgeAttrs
+  };
+}
+
+
+    function findUpLayers() {
+      if (!parseDot()) return;
+      const start = getNodeInput();
+      const maxDepth = parseInt(document.getElementById("upDepth").value);
+      if (!start || isNaN(maxDepth) || maxDepth <= 0) return;
+
+      bfsLayers({
+        start,
+        maxDepth,
+        directionLabel: "上",
+        getNeighbors: node => graph.predecessors(node) || [],
+        pathFormatter: path => path.slice().reverse().join("->"),
+        isUp: true
+      });
+    }
+
+    function findDownLayers() {
+      if (!parseDot()) return;
+      const start = getNodeInput();
+      const maxDepth = parseInt(document.getElementById("downDepth").value);
+      if (!start || isNaN(maxDepth) || maxDepth <= 0) return;
+
+      bfsLayers({
+        start,
+        maxDepth,
+        directionLabel: "下",
+        getNeighbors: node => graph.successors(node) || [],
+        pathFormatter: path => path.join("->"),
+        isUp: false
+      });
+    }
+
+    // BFS 的層級搜尋：增加 isUp 參數，並在產生 payload 前使用 createPayloadFromPath 做排序/normalize
+    function bfsLayers({ start, maxDepth, directionLabel, getNeighbors, pathFormatter, isUp = false }) {
+      let currentLevel = [[start]];
+
+      for (let depth = 1; depth <= maxDepth; depth++) {
+        const nextLevel = [];
+        const layerNodes = new Set();
+        const pathsByNode = new Map();
+
+        for (const path of currentLevel) {
+          const lastNode = path[path.length - 1];
+          const neighbors = getNeighbors(lastNode);
+
+          for (const neighbor of neighbors) {
+            if (path.includes(neighbor)) continue;
+            const newPath = [...path, neighbor];
+            nextLevel.push(newPath);
+            layerNodes.add(neighbor);
+
+            if (!pathsByNode.has(neighbor)) {
+              pathsByNode.set(neighbor, []);
+            }
+            pathsByNode.get(neighbor).push(newPath);
+          }
+        }
+
+        const layerArray = [...layerNodes];
+        addMessage(`${start} 的${directionLabel}${depth}層節點是: ${layerArray.length ? layerArray.join(", ") : "（無）"}`);
+
+        const allPathsInLayer = [];
+        for (const node of layerArray) {
+          const paths = pathsByNode.get(node) || [];
+          allPathsInLayer.push(...paths);
+        }
+
+        allPathsInLayer.forEach((path, index) => {
+          // 產生 payload 時，依 isUp 決定 raw index，並排序 nodes & indexList
+          const payload = createPayloadFromPath(path, isUp);
+          // 顯示用的文字（不變）：若是向上搜尋，我們希望顯示 a->b->c，所以 pathFormatter 會反轉顯示
+          const htmlLink = `<a href="#" onclick='handlePathClick(${JSON.stringify(payload)})'>${pathFormatter(path)}</a>`;
+          addMessage(`路徑${index + 1}: ${htmlLink}`);
+        });
+
+        currentLevel = nextLevel;
+      }
+    }
+
+function handlePathClick(payload) {
+  console.log("[handlePathClick] payload 收到：", payload);
+  const { nodes, edges, nodeAttrs, edgeAttrs } = payload;
+
+  const startNode = nodes[0];
+  const extraEdges = [];
+
+  // 原本路徑上的邊
+  const baseEdges = [...edges];
+
+  // 對路徑上的節點做檢查
+  for (const node of nodes) {
+    if (node === startNode) continue; // 起點不用加 incoming edges
+
+    const attrs = nodeAttrs[node] || {};
+    if (attrs.class !== "category") {
+      // class != category → 加入所有 incoming edges
+      const sources = graph.predecessors(node) || [];
+      for (const src of sources) {
+        extraEdges.push({ source: src, target: node });
+      }
+    }
+  }
+
+  // 合併並去重複
+  const combinedEdges = [...baseEdges, ...extraEdges]
+    .filter((e, idx, arr) =>
+      arr.findIndex(x => x.source === e.source && x.target === e.target) === idx
+    );
+
+  // 節點集合
+  const allNodes = new Set();
+  combinedEdges.forEach(e => { allNodes.add(e.source); allNodes.add(e.target); });
+
+  // 用來 highlight 的 set
+  const pathNodes = new Set(payload.originalNodes);
+  const pathEdgesSet = new Set(payload.edges.map(e => `${e.source}->${e.target}`));
+
+  // DOT 節點部分
+  const nodeDefs = [...allNodes]
+    .map(n => {
+      const attr = {...(graph.node(n) || {})};
+      if (pathNodes.has(n)) {
+        attr.penwidth = 3;
+      }
+      return `${n}${attrsToDot(attr)};`;
+    })
+    .join("\n  ");
+
+  // DOT 邊部分
+  const edgeDefs = combinedEdges.map(e => {
+    const key = `${e.source}->${e.target}`;
+    const attr = {...(graph.edge({ v: e.source, w: e.target }) || {})};
+    if (pathEdgesSet.has(key)) {
+      attr.penwidth = 3;
+    }
+    return `${e.source} -> ${e.target}${attrsToDot(attr)};`;
+  }).join("\n  ");
+
+  const dot = `digraph graph_output {\n  ${nodeDefs}\n\n  ${edgeDefs}\n}`;
+  renderSubgraph(dot);
+}
+
+
+
+    function renderSubgraph(dot) {
+      const container = d3.select("#svgOutput");
+      container.selectAll("*").remove(); // 清空 SVG
+
+      const graphviz = container
+        .append("div")
+        .attr("id", "graphviz-inner")
+        .style("width", "100%")
+        .style("height", "100%");
+
+      graphviz
+        .graphviz()
+        .transition(d3.transition().duration(500))
+        .renderDot(dot)
+        .on("end", enableZoom);
+    }
+
+    function enableZoom() {
+      const svg = d3.select("#svgOutput svg");
+      const inner = svg.select("g");
+
+      const zoom = d3.zoom()
+        .scaleExtent([0.1, 10])
+        .on("zoom", (event) => {
+          inner.attr("transform", event.transform);
+        });
+
+      svg.call(zoom);
+    }
+
+    function findAllPaths() {
+      if (!parseDot()) return;
+      clearMessages();
+
+      const start = document.getElementById("pathStart").value.trim();
+      const end = document.getElementById("pathEnd").value.trim();
+      const maxHop = parseInt(document.getElementById("maxHop").value);
+
+      if (!start || !end) {
+        addMessage("請輸入起點和終點節點名稱");
+        return;
+      }
+      if (!graph.hasNode(start)) {
+        addMessage(`起點節點 "${start}" 不存在於圖中`);
+        return;
+      }
+      if (!graph.hasNode(end)) {
+        addMessage(`終點節點 "${end}" 不存在於圖中`);
+        return;
+      }
+      if (isNaN(maxHop) || maxHop < 1) {
+        addMessage("請輸入有效的最大 hop 數 (≥1)");
+        return;
+      }
+
+      const allPaths = [];
+
+      function dfs(current, target, path) {
+        if (path.length - 1 > maxHop) return;
+        if (current === target) {
+          allPaths.push([...path]);
+          return;
+        }
+        const neighbors = graph.successors(current) || [];
+        for (const next of neighbors) {
+          if (path.includes(next)) continue;
+          dfs(next, target, [...path, next]);
+        }
+      }
+
+      dfs(start, end, [start]);
+
+      if (allPaths.length === 0) {
+        addMessage(`找不到從 ${start} 到 ${end}，且 hop ≤ ${maxHop} 的路徑`);
+        return;
+      }
+
+      allPaths.sort((a, b) => a.length - b.length);
+      addMessage(`找到 ${start} 到 ${end}，最多 hop 數 ${maxHop} 的路徑共 ${allPaths.length} 條：`);
+
+      let currentHop = 0;
+      let pathIndex = 1;
+      for (const path of allPaths) {
+        const hopCount = path.length - 1;
+        if (hopCount !== currentHop) {
+          currentHop = hopCount;
+          addMessage(`\n${start} 到 ${end} 的 ${currentHop} hop 路徑:`);
+          pathIndex = 1;
+        }
+        // findAllPaths 為向下搜尋（start->...->end），因此 isUp = false
+        const payload = createPayloadFromPath(path, false);
+        const linkHtml = `<a href="#" onclick='handlePathClick(${JSON.stringify(payload)})'>${path.join("->")}</a>`;
+        addMessage(`路徑${pathIndex}: ${linkHtml}`);
+        pathIndex++;
+      }
+    }
+  </script>
+</body>
+</html>
