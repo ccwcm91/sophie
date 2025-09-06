@@ -22,6 +22,8 @@
 <body>
   <div id="leftPane">
     <h2>DOT 輸入</h2>
+
+    <!-- 新增選取方塊 -->
     <textarea id="dotInput">digraph {
   a1->b1
   a2->b1
@@ -42,23 +44,30 @@
   d1->y
   d1->z
 }</textarea>
+    <label>
+      <input type="radio" name="dotSource" onclick="loadDotFile()"> 載入 a17.dot
+    </label>
 
-    <h3>查詢節點</h3>
-    <input type="text" id="nodeInput" placeholder="請輸入節點名稱">
-    <br>
-    <input type="number" id="upDepth" value="1" min="1" style="width: 150px;">
-    <button onclick="findUpLayers()">找出向上層的節點與路徑</button>
-    <br>
-    <input type="number" id="downDepth" value="1" min="1" style="width: 150px;">
-    <button onclick="findDownLayers()">找出向下層的節點與路徑</button>
+<h3>查詢節點</h3>
+<input type="text" id="nodeInput" placeholder="請輸入節點名稱" list="nodeList">
+<br>
+<input type="number" id="upDepth" value="1" min="1" style="width: 150px;">
+<button onclick="findUpLayers()">找出向上層的節點與路徑</button>
+<br>
+<input type="number" id="downDepth" value="1" min="1" style="width: 150px;">
+<button onclick="findDownLayers()">找出向下層的節點與路徑</button>
 
-    <hr>
+<hr>
 
-    <h3>查詢所有路徑</h3>
-    起點Node<input type="text" id="pathStart" placeholder="起點節點" style="width:120px;"><br>
-    終點Node<input type="text" id="pathEnd" placeholder="終點節點" style="width:120px;"><br>
-    最大hop數<input type="number" id="maxHop" value="6" min="1" style="width:120px;">
-    <button onclick="findAllPaths()">找出所有路徑</button>
+<h3>查詢所有路徑</h3>
+起點Node<input type="text" id="pathStart" placeholder="起點節點" style="width:120px;" list="nodeList"><br>
+終點Node<input type="text" id="pathEnd" placeholder="終點節點" style="width:120px;" list="nodeList"><br>
+最大hop數<input type="number" id="maxHop" value="6" min="1" style="width:120px;">
+<button onclick="findAllPaths()">找出所有路徑</button>
+
+<!-- 新增 datalist -->
+<datalist id="nodeList"></datalist>
+
   </div>
 
   <div id="rightPane">
@@ -73,16 +82,48 @@
   <script>
     let graph;
 
-    function parseDot() {
-      const dotText = document.getElementById("dotInput").value;
-      try {
-        graph = graphlibDot.read(dotText);
-        return true;
-      } catch (e) {
-        addMessage("❌ DOT 解析錯誤: " + e.message);
-        return false;
-      }
-    }
+    // 新增：讀取 a17.dot
+async function loadDotFile() {
+  try {
+    const response = await fetch("a17.dot");
+    if (!response.ok) throw new Error("讀取失敗");
+    const text = await response.text();
+    document.getElementById("dotInput").value = text;
+    parseDot(); // 讀進來後立即解析並更新候選清單
+    addMessage("✅ 已載入 a17.dot 並完成解析");
+  } catch (err) {
+    addMessage("❌ 載入 a17.dot 失敗: " + err.message);
+  }
+}
+
+function parseDot() {
+  const dotText = document.getElementById("dotInput").value;
+  try {
+    graph = graphlibDot.read(dotText);
+
+    // 更新 node 篩選清單
+    updateNodeList();
+
+    return true;
+  } catch (e) {
+    addMessage("❌ DOT 解析錯誤: " + e.message);
+    return false;
+  }
+}
+
+function updateNodeList() {
+  const nodeList = document.getElementById("nodeList");
+  nodeList.innerHTML = ""; // 清空舊的
+
+  const nodes = graph.nodes();
+  nodes.sort();
+
+  for (const n of nodes) {
+    const opt = document.createElement("option");
+    opt.value = n;
+    nodeList.appendChild(opt);
+  }
+}
 
     function getNodeInput() {
       const node = document.getElementById("nodeInput").value.trim();
@@ -407,6 +448,22 @@ function handlePathClick(payload) {
         pathIndex++;
       }
     }
+
+document.getElementById("nodeInput").addEventListener("input", function() {
+  if (!graph) return; // graph 尚未解析就跳過
+  const keyword = this.value.trim().toLowerCase();
+  const nodeList = document.getElementById("nodeList");
+  nodeList.innerHTML = "";
+
+  const nodes = graph.nodes().sort();
+  for (const n of nodes) {
+    if (n.toLowerCase().includes(keyword)) {
+      const opt = document.createElement("option");
+      opt.value = n;
+      nodeList.appendChild(opt);
+    }
+  }
+});
   </script>
 </body>
 </html>
