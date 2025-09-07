@@ -24,25 +24,15 @@
     <h2>DOT 輸入</h2>
 
     <!-- 新增選取方塊 -->
-    <textarea id="dotInput">digraph {
-  a1->b1
-  a2->b1
-  a3->b1
-
-  b1->c1
-  b2->c1
-  b3->c1
-
-  c1->d1
-  c2->d1
-  c3->d1
-
-  b1->x
-  b1->y
-  c1->x
-  c1->z
-  d1->y
-  d1->z
+    <textarea id="dotInput">digraph { 
+a0->a1 
+a1->b1
+b1->c1 
+b2->c1 
+b3->c1 
+c1->d1
+d1->a1
+d2->a1
 }</textarea>
     <label>
       <input type="radio" name="dotSource" onclick="loadDotFile()"> 載入 a17.dot
@@ -245,55 +235,63 @@ function createPayloadFromPath(path, isUp = false) {
     }
 
     // BFS 的層級搜尋：增加 isUp 參數，並在產生 payload 前使用 createPayloadFromPath 做排序/normalize
-    function bfsLayers({ start, maxDepth, directionLabel, getNeighbors, pathFormatter, isUp = false }) {
-      let currentLevel = [[start]];
+// BFS 的層級搜尋：支援 self-loop
+function bfsLayers({ start, maxDepth, directionLabel, getNeighbors, pathFormatter, isUp = false }) {
+  let currentLevel = [[start]];
 
-      for (let depth = 1; depth <= maxDepth; depth++) {
-        const nextLevel = [];
-        const layerNodes = new Set();
-        const pathsByNode = new Map();
+  for (let depth = 1; depth <= maxDepth; depth++) {
+    const nextLevel = [];
+    const layerNodes = new Set();
+    const pathsByNode = new Map();
 
-        for (const path of currentLevel) {
-          const lastNode = path[path.length - 1];
-          const neighbors = getNeighbors(lastNode);
+    for (const path of currentLevel) {
+      const lastNode = path[path.length - 1];
+      const neighbors = getNeighbors(lastNode);
 
-          for (const neighbor of neighbors) {
-            if (path.includes(neighbor)) continue;
-            const newPath = [...path, neighbor];
-            nextLevel.push(newPath);
-            layerNodes.add(neighbor);
+      for (const neighbor of neighbors) {
+        // ✅ 允許 self-loop
+        // ✅ 允許回到起點形成 cycle
+        if (
+          neighbor !== lastNode && 
+          path.includes(neighbor) && 
+          !(neighbor === start)
+        ) continue;
 
-            if (!pathsByNode.has(neighbor)) {
-              pathsByNode.set(neighbor, []);
-            }
-            pathsByNode.get(neighbor).push(newPath);
-          }
+        const newPath = [...path, neighbor];
+        nextLevel.push(newPath);
+        layerNodes.add(neighbor);
+
+        if (!pathsByNode.has(neighbor)) {
+          pathsByNode.set(neighbor, []);
         }
-
-        const layerArray = [...layerNodes];
-        addMessage(`${start} 的${directionLabel}${depth}層節點是: ${layerArray.length ? layerArray.join(", ") : "（無）"}`);
-
-        const allPathsInLayer = [];
-        for (const node of layerArray) {
-          const paths = pathsByNode.get(node) || [];
-          allPathsInLayer.push(...paths);
-        }
-
-        allPathsInLayer.forEach((path, index) => {
-          // 產生 payload 時，依 isUp 決定 raw index，並排序 nodes & indexList
-          const payload = createPayloadFromPath(path, isUp);
-          // 顯示用的文字（不變）：若是向上搜尋，我們希望顯示 a->b->c，所以 pathFormatter 會反轉顯示
-          const htmlLink = `<a href="#" onclick='handlePathClick(${JSON.stringify(payload)})'>${pathFormatter(path)}</a>`;
-          addMessage(`路徑${index + 1}: ${htmlLink}`);
-        });
-
-        currentLevel = nextLevel;
+        pathsByNode.get(neighbor).push(newPath);
       }
     }
 
+    const layerArray = [...layerNodes];
+    addMessage(`${start} 的${directionLabel}${depth}層節點是: ${layerArray.length ? layerArray.join(", ") : "（無）"}`);
+
+    const allPathsInLayer = [];
+    for (const node of layerArray) {
+      const paths = pathsByNode.get(node) || [];
+      allPathsInLayer.push(...paths);
+    }
+
+    allPathsInLayer.forEach((path, index) => {
+      const payload = createPayloadFromPath(path, isUp);
+      const htmlLink = `<a href="#" onclick='handlePathClick(${JSON.stringify(payload)})'>${pathFormatter(path)}</a>`;
+      addMessage(`路徑${index + 1}: ${htmlLink}`);
+    });
+
+    currentLevel = nextLevel;
+  }
+}
+
+
+
 function handlePathClick(payload) {
   console.log("[handlePathClick] payload 收到：", payload);
-  const { nodes, edges, nodeAttrs, edgeAttrs } = payload;
+  const { nodes, edges, nodeAttrs } = payload;
 
   const startNode = nodes[0];
   const extraEdges = [];
@@ -302,15 +300,20 @@ function handlePathClick(payload) {
   const baseEdges = [...edges];
 
   // 對路徑上的節點做檢查
-  for (const node of nodes) {
-    if (node === startNode) continue; // 起點不用加 incoming edges
-
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
     const attrs = nodeAttrs[node] || {};
-    if (attrs.class !== "category") {
-      // class != category → 加入所有 incoming edges
-      const sources = graph.predecessors(node) || [];
-      for (const src of sources) {
-        extraEdges.push({ source: src, target: node });
+
+    const isSelfLoop = edges.some(e => e.source === node && e.target === node);
+    const isLastNode = (i === nodes.length - 1);
+
+    // ⭐ 修正：最後一個節點也要反查 predecessors
+    if (node !== startNode || isSelfLoop || isLastNode) {
+      if (attrs.class !== "category") {
+        const sources = graph.predecessors(node) || [];
+        for (const src of sources) {
+          extraEdges.push({ source: src, target: node });
+        }
       }
     }
   }
@@ -353,6 +356,7 @@ function handlePathClick(payload) {
   const dot = `digraph graph_output {\n  ${nodeDefs}\n\n  ${edgeDefs}\n}`;
   renderSubgraph(dot);
 }
+
 
 
 
