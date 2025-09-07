@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="282pt" height="116pt" viewBox="0.00 0.00 282.20 116.00">
+<g id="graph0" class="graph" transform="translate(4,112) scale(1)">
+<title style="">graph_output</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-112 278.2,-112 278.2,4 -4,4" style=""/>
+<!-- 海膽 -->
+<g id="node1" class="node">
+<title style="">海膽</title>
+<ellipse fill="none" stroke="yellow" stroke-width="3" cx="27" cy="-90" rx="27" ry="18" style=""/>
+<text text-anchor="middle" x="27" y="-85.8" font-family="Times,serif" font-size="14.00" style="">海膽</text>
+</g>
+<!-- 海膽袋 -->
+<g id="node2" class="node">
+<title style="">海膽袋</title>
+<polygon fill="none" stroke="yellow" stroke-width="3" points="145,-36 91,-36 91,0 145,0 145,-36" style=""/>
+<text text-anchor="middle" x="118" y="-13.8" font-family="Times,serif" font-size="14.00" style="">海膽袋</text>
+</g>
+<!-- 海膽&#45;&gt;海膽袋 -->
+<g id="edge1" class="edge">
+<title style="">海膽-&gt;海膽袋</title>
+<path fill="none" stroke="black" stroke-width="3" d="M44.98,-75.17C55.77,-66.87 69.86,-56.03 82.78,-46.09" style=""/>
+<polygon fill="black" stroke="black" stroke-width="3" points="84.8,-48.95 90.6,-40.08 80.54,-43.4 84.8,-48.95" style=""/>
+</g>
+<!-- 火藥 -->
+<g id="node3" class="node category">
+<title style="">火藥</title>
+<polygon fill="lightgrey" stroke="black" points="164.2,-90 141.1,-108 94.9,-108 71.8,-90 94.9,-72 141.1,-72 164.2,-90" style=""/>
+<text text-anchor="middle" x="118" y="-85.8" font-family="Times,serif" font-size="14.00" style="">（火藥）</text>
+</g>
+<!-- 火藥&#45;&gt;海膽袋 -->
+<g id="edge2" class="edge">
+<title style="">火藥-&gt;海膽袋</title>
+<path fill="none" stroke="black" d="M118,-71.7C118,-64.71 118,-56.44 118,-48.55" style=""/>
+<polygon fill="black" stroke="black" points="121.5,-48.59 118,-38.59 114.5,-48.59 121.5,-48.59" style=""/>
+</g>
+<!-- 礦石 -->
+<g id="node4" class="node category">
+<title style="">礦石</title>
+<polygon fill="lightgrey" stroke="black" points="274.2,-90 251.1,-108 204.9,-108 181.8,-90 204.9,-72 251.1,-72 274.2,-90" style=""/>
+<text text-anchor="middle" x="228" y="-85.8" font-family="Times,serif" font-size="14.00" style="">（礦石）</text>
+</g>
+<!-- 礦石&#45;&gt;海膽袋 -->
+<g id="edge3" class="edge">
+<title style="">礦石-&gt;海膽袋</title>
+<path fill="none" stroke="black" d="M203.04,-73.12C189.08,-64.23 171.39,-52.97 155.76,-43.03" style=""/>
+<polygon fill="black" stroke="black" points="157.94,-40.27 147.63,-37.85 154.19,-46.18 157.94,-40.27" style=""/>
+</g>
+</g>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="294pt" height="116pt" viewBox="0.00 0.00 294.39 116.00">
+<g id="graph0" class="graph" transform="translate(4,112) scale(1)">
+<title style="">graph_output</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-112 290.39,-112 290.39,4 -4,4" style=""/>
+<!-- 線材 -->
+<g id="node1" class="node category">
+<title style="">線材</title>
+<polygon fill="lightgrey" stroke="black" stroke-width="3" points="92.39,-90 69.29,-108 23.1,-108 0,-90 23.1,-72 69.29,-72 92.39,-90" style=""/>
+<text text-anchor="middle" x="46.2" y="-85.8" font-family="Times,serif" font-size="14.00" style="">（線材）</text>
+</g>
+<!-- 人偶師的線 -->
+<g id="node2" class="node">
+<title style="">人偶師的線</title>
+<polygon fill="none" stroke="yellow" stroke-width="3" points="128.45,-36 59.95,-36 59.95,0 128.45,0 128.45,-36" style=""/>
+<text text-anchor="middle" x="94.2" y="-13.8" font-family="Times,serif" font-size="14.00" style="">人偶師的線</text>
+</g>
+<!-- 線材&#45;&gt;人偶師的線 -->
+<g id="edge1" class="edge">
+<title style="">線材-&gt;人偶師的線</title>
+<path fill="none" stroke="black" stroke-width="3" d="M52.78,-70.61C56.76,-63.88 61.88,-56.1 67.19,-48.64" style=""/>
+<polygon fill="black" stroke="black" stroke-width="3" points="69.96,-50.78 73.13,-40.67 64.35,-46.59 69.96,-50.78" style=""/>
+</g>
+<!-- 人偶師的線&#45;&gt;線材 -->
+<g id="edge2" class="edge">
+<title style="">人偶師的線-&gt;線材</title>
+<path fill="none" stroke="black" stroke-width="3" d="M87.82,-37.03C83.89,-43.71 78.79,-51.49 73.49,-58.96" style=""/>
+<polygon fill="black" stroke="black" stroke-width="3" points="70.69,-56.85 67.54,-66.96 76.31,-61.02 70.69,-56.85" style=""/>
+</g>
+<!-- 黏銀絲 -->
+<g id="node3" class="node">
+<title style="">黏銀絲</title>
+<ellipse fill="none" stroke="yellow" cx="143.2" cy="-90" rx="32.76" ry="18" style=""/>
+<text text-anchor="middle" x="143.2" y="-85.8" font-family="Times,serif" font-size="14.00" style="">黏銀絲</text>
+</g>
+<!-- 黏銀絲&#45;&gt;人偶師的線 -->
+<g id="edge3" class="edge">
+<title style="">黏銀絲-&gt;人偶師的線</title>
+<path fill="none" stroke="black" d="M131.83,-72.76C126.39,-64.99 119.73,-55.47 113.52,-46.61" style=""/>
+<polygon fill="black" stroke="black" points="116.52,-44.79 107.92,-38.61 110.79,-48.81 116.52,-44.79" style=""/>
+</g>
+<!-- 燃料 -->
+<g id="node4" class="node category">
+<title style="">燃料</title>
+<polygon fill="lightgrey" stroke="black" points="286.39,-90 263.29,-108 217.1,-108 194,-90 217.1,-72 263.29,-72 286.39,-90" style=""/>
+<text text-anchor="middle" x="240.2" y="-85.8" font-family="Times,serif" font-size="14.00" style="">（燃料）</text>
+</g>
+<!-- 燃料&#45;&gt;人偶師的線 -->
+<g id="edge4" class="edge">
+<title style="">燃料-&gt;人偶師的線</title>
+<path fill="none" stroke="black" d="M212.05,-75.5C191.62,-65.71 163.54,-52.25 139.92,-40.92" style=""/>
+<polygon fill="black" stroke="black" points="141.66,-37.87 131.13,-36.71 138.63,-44.18 141.66,-37.87" style=""/>
+</g>
+</g>
+</svg>

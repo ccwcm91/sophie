@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="371pt" height="124pt" viewBox="0.00 0.00 370.76 124.00">
+<g id="graph0" class="graph" transform="translate(4,120) scale(1)">
+<title style="">graph_output</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-120 366.76,-120 366.76,4 -4,4" style=""/>
+<!-- 黏土 -->
+<g id="node1" class="node category">
+<title style="">黏土</title>
+<polygon fill="lightgrey" stroke="black" stroke-width="3" points="92.39,-98 69.29,-116 23.1,-116 0,-98 23.1,-80 69.29,-80 92.39,-98" style=""/>
+<text text-anchor="middle" x="46.2" y="-93.8" font-family="Times,serif" font-size="14.00" style="">（黏土）</text>
+</g>
+<!-- 鍊金黏土 -->
+<g id="node2" class="node">
+<title style="">鍊金黏土</title>
+<polygon fill="none" stroke="#7f7f7f" stroke-width="3" points="138.2,-40 80.2,-40 80.2,-4 138.2,-4 138.2,-40" style=""/>
+<polygon fill="none" stroke="#7f7f7f" stroke-width="3" points="142.2,-44 76.2,-44 76.2,0 142.2,0 142.2,-44" style=""/>
+<text text-anchor="middle" x="109.2" y="-17.8" font-family="Times,serif" font-size="14.00" style="">鍊金黏土</text>
+</g>
+<!-- 黏土&#45;&gt;鍊金黏土 -->
+<g id="edge1" class="edge">
+<title style="">黏土-&gt;鍊金黏土</title>
+<path fill="none" stroke="black" stroke-width="3" d="M55.85,-78.71C61.03,-71.84 67.6,-63.81 74.37,-56.02" style=""/>
+<polygon fill="black" stroke="black" stroke-width="3" points="76.87,-58.48 80.93,-48.69 71.65,-53.81 76.87,-58.48" style=""/>
+</g>
+<!-- 鍊金黏土&#45;&gt;黏土 -->
+<g id="edge2" class="edge">
+<title style="">鍊金黏土-&gt;黏土</title>
+<path fill="none" stroke="black" stroke-width="3" d="M96.46,-45.31C90.86,-52.48 84.12,-60.53 77.4,-68.11" style=""/>
+<polygon fill="black" stroke="black" stroke-width="3" points="74.93,-65.62 70.75,-75.36 80.09,-70.35 74.93,-65.62" style=""/>
+</g>
+<!-- 神秘之力 -->
+<g id="node3" class="node category">
+<title style="">神秘之力</title>
+<polygon fill="lightgrey" stroke="black" points="236.12,-98 204.66,-116 141.74,-116 110.27,-98 141.74,-80 204.66,-80 236.12,-98" style=""/>
+<text text-anchor="middle" x="173.2" y="-93.8" font-family="Times,serif" font-size="14.00" style="">（神秘之力）</text>
+</g>
+<!-- 神秘之力&#45;&gt;鍊金黏土 -->
+<g id="edge3" class="edge">
+<title style="">神秘之力-&gt;鍊金黏土</title>
+<path fill="none" stroke="black" d="M158.35,-79.84C151.71,-72.15 143.66,-62.85 136.01,-54.01" style=""/>
+<polygon fill="black" stroke="black" points="138.75,-51.82 129.56,-46.55 133.46,-56.4 138.75,-51.82" style=""/>
+</g>
+<!-- 中和劑 -->
+<g id="node4" class="node category">
+<title style="">中和劑</title>
+<polygon fill="lightgrey" stroke="black" points="362.76,-98 335.48,-116 280.92,-116 253.64,-98 280.92,-80 335.48,-80 362.76,-98" style=""/>
+<text text-anchor="middle" x="308.2" y="-93.8" font-family="Times,serif" font-size="14.00" style="">（中和劑）</text>
+</g>
+<!-- 中和劑&#45;&gt;鍊金黏土 -->
+<g id="edge4" class="edge">
+<title style="">中和劑-&gt;鍊金黏土</title>
+<path fill="none" stroke="black" d="M273.99,-84.28C240.95,-72 190.73,-53.32 154.42,-39.82" style=""/>
+<polygon fill="black" stroke="black" points="155.64,-36.54 145.04,-36.33 153.2,-43.1 155.64,-36.54" style=""/>
+</g>
+</g>
+</svg>

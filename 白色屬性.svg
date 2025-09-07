@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="134pt" height="124pt" viewBox="0.00 0.00 133.85 124.00">
+<g id="graph0" class="graph" transform="translate(4,120) scale(1)">
+<title style="">graph_output</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-120 129.85,-120 129.85,4 -4,4" style=""/>
+<!-- 龍鱗片 -->
+<g id="node1" class="node">
+<title style="">龍鱗片</title>
+<ellipse fill="none" stroke="#7f7f7f" stroke-width="3" cx="62.92" cy="-94" rx="32.76" ry="18" style=""/>
+<ellipse fill="none" stroke="#7f7f7f" stroke-width="3" cx="62.92" cy="-94" rx="36.76" ry="22" style=""/>
+<text text-anchor="middle" x="62.92" y="-89.8" font-family="Times,serif" font-size="14.00" style="">龍鱗片</text>
+</g>
+<!-- 動物素材 -->
+<g id="node2" class="node category">
+<title style="">動物素材</title>
+<polygon fill="lightgrey" stroke="black" stroke-width="3" points="125.85,-18 94.38,-36 31.46,-36 0,-18 31.46,0 94.38,0 125.85,-18" style=""/>
+<text text-anchor="middle" x="62.92" y="-13.8" font-family="Times,serif" font-size="14.00" style="">（動物素材）</text>
+</g>
+<!-- 龍鱗片&#45;&gt;動物素材 -->
+<g id="edge1" class="edge">
+<title style="">龍鱗片-&gt;動物素材</title>
+<path fill="none" stroke="black" stroke-width="3" d="M62.92,-70.8C62.92,-64.76 62.92,-58.1 62.92,-51.62" style=""/>
+<polygon fill="black" stroke="black" stroke-width="3" points="66.42,-51.75 62.92,-41.75 59.42,-51.75 66.42,-51.75" style=""/>
+</g>
+</g>
+</svg>

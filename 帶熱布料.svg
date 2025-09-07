@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="519pt" height="476pt" viewBox="0.00 0.00 519.12 476.00">
+<g id="graph0" class="graph" transform="translate(4,472) scale(1)">
+<title style="">graph_output</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-472 515.12,-472 515.12,4 -4,4" style=""/>
+<!-- 火岩石 -->
+<g id="node1" class="node">
+<title style="">火岩石</title>
+<ellipse fill="none" stroke="red" stroke-width="3" cx="46.2" cy="-450" rx="32.76" ry="18" style=""/>
+<text text-anchor="middle" x="46.2" y="-445.8" font-family="Times,serif" font-size="14.00" style="">火岩石</text>
+</g>
+<!-- 火藥 -->
+<g id="node2" class="node category">
+<title style="">火藥</title>
+<polygon fill="lightgrey" stroke="black" stroke-width="3" points="92.39,-378 69.29,-396 23.1,-396 0,-378 23.1,-360 69.29,-360 92.39,-378" style=""/>
+<text text-anchor="middle" x="46.2" y="-373.8" font-family="Times,serif" font-size="14.00" style="">（火藥）</text>
+</g>
+<!-- 火岩石&#45;&gt;火藥 -->
+<g id="edge1" class="edge">
+<title style="">火岩石-&gt;火藥</title>
+<path fill="none" stroke="black" stroke-width="3" d="M46.2,-430.61C46.2,-424.69 46.2,-417.96 46.2,-411.35" style=""/>
+<polygon fill="black" stroke="black" stroke-width="3" points="49.7,-411.57 46.2,-401.57 42.7,-411.57 49.7,-411.57" style=""/>
+</g>
+<!-- 中和劑紅 -->
+<g id="node3" class="node">
+<title style="">中和劑紅</title>
+<polygon fill="none" stroke="red" stroke-width="3" points="126.2,-324 68.2,-324 68.2,-288 126.2,-288 126.2,-324" style=""/>
+<text text-anchor="middle" x="97.2" y="-301.8" font-family="Times,serif" font-size="14.00" style="">中和劑紅</text>
+</g>
+<!-- 火藥&#45;&gt;中和劑紅 -->
+<g id="edge2" class="edge">
+<title style="">火藥-&gt;中和劑紅</title>
+<path fill="none" stroke="black" stroke-width="3" d="M59.6,-358.61C64.5,-351.88 70.17,-344.1 75.6,-336.64" style=""/>
+<polygon fill="black" stroke="black" stroke-width="3" points="78.33,-338.84 81.39,-328.7 72.67,-334.72 78.33,-338.84" style=""/>
+</g>
+<!-- 燃料 -->
+<g id="node4" class="node category">
+<title style="">燃料</title>
+<polygon fill="lightgrey" stroke="black" stroke-width="3" points="143.39,-234 120.29,-252 74.1,-252 51,-234 74.1,-216 120.29,-216 143.39,-234" style=""/>
+<text text-anchor="middle" x="97.2" y="-229.8" font-family="Times,serif" font-size="14.00" style="">（燃料）</text>
+</g>
+<!-- 中和劑紅&#45;&gt;燃料 -->
+<g id="edge3" class="edge">
+<title style="">中和劑紅-&gt;燃料</title>
+<path fill="none" stroke="black" stroke-width="3" d="M97.2,-286.61C97.2,-280.69 97.2,-273.96 97.2,-267.35" style=""/>
+<polygon fill="black" stroke="black" stroke-width="3" points="100.7,-267.57 97.2,-257.57 93.7,-267.57 100.7,-267.57" style=""/>
+</g>
+<!-- 綑起來的金線 -->
+<g id="node5" class="node">
+<title style="">綑起來的金線</title>
+<polygon fill="none" stroke="yellow" stroke-width="3" points="233.7,-180 154.7,-180 154.7,-144 233.7,-144 233.7,-180" style=""/>
+<text text-anchor="middle" x="194.2" y="-157.8" font-family="Times,serif" font-size="14.00" style="">綑起來的金線</text>
+</g>
+<!-- 燃料&#45;&gt;綑起來的金線 -->
+<g id="edge4" class="edge">
+<title style="">燃料-&gt;綑起來的金線</title>
+<path fill="none" stroke="black" stroke-width="3" d="M121.67,-215.34C132.45,-207.56 145.34,-198.26 157.25,-189.66" style=""/>
+<polygon fill="black" stroke="black" stroke-width="3" points="158.97,-192.74 165.03,-184.05 154.87,-187.06 158.97,-192.74" style=""/>
+</g>
+<!-- 線材 -->
+<g id="node6" class="node category">
+<title style="">線材</title>
+<polygon fill="lightgrey" stroke="black" stroke-width="3" points="240.39,-90 217.29,-108 171.1,-108 148,-90 171.1,-72 217.29,-72 240.39,-90" style=""/>
+<text text-anchor="middle" x="194.2" y="-85.8" font-family="Times,serif" font-size="14.00" style="">（線材）</text>
+</g>
+<!-- 綑起來的金線&#45;&gt;線材 -->
+<g id="edge5" class="edge">
+<title style="">綑起來的金線-&gt;線材</title>
+<path fill="none" stroke="black" stroke-width="3" d="M194.2,-142.61C194.2,-136.69 194.2,-129.96 194.2,-123.35" style=""/>
+<polygon fill="black" stroke="black" stroke-width="3" points="197.7,-123.57 194.2,-113.57 190.7,-123.57 197.7,-123.57" style=""/>
+</g>
+<!-- 布料 -->
+<g id="node7" class="node">
+<title style="">布料</title>
+<polygon fill="none" stroke="yellow" stroke-width="3" points="340.2,-36 286.2,-36 286.2,0 340.2,0 340.2,-36" style=""/>
+<text text-anchor="middle" x="313.2" y="-13.8" font-family="Times,serif" font-size="14.00" style="">布料</text>
+</g>
+<!-- 線材&#45;&gt;布料 -->
+<g id="edge6" class="edge">
+<title style="">線材-&gt;布料</title>
+<path fill="none" stroke="black" stroke-width="3" d="M220.9,-73.29C236.08,-64.36 255.41,-52.99 272.44,-42.97" style=""/>
+<polygon fill="black" stroke="black" stroke-width="3" points="274.16,-46.02 281.01,-37.93 270.61,-39.99 274.16,-46.02" style=""/>
+</g>
+<!-- 水 -->
+<g id="node8" class="node category">
+<title style="">水</title>
+<polygon fill="lightgrey" stroke="black" points="186.03,-378 167.11,-396 129.28,-396 110.36,-378 129.28,-360 167.11,-360 186.03,-378" style=""/>
+<text text-anchor="middle" x="148.2" y="-373.8" font-family="Times,serif" font-size="14.00" style="">（水）</text>
+</g>
+<!-- 水&#45;&gt;中和劑紅 -->
+<g id="edge7" class="edge">
+<title style="">水-&gt;中和劑紅</title>
+<path fill="none" stroke="black" d="M135.59,-359.7C130.02,-352.05 123.33,-342.87 117.11,-334.33" style=""/>
+<polygon fill="black" stroke="black" points="119.98,-332.33 111.26,-326.3 114.32,-336.45 119.98,-332.33" style=""/>
+</g>
+<!-- 黏銀絲 -->
+<g id="node9" class="node">
+<title style="">黏銀絲</title>
+<ellipse fill="none" stroke="yellow" cx="194.2" cy="-234" rx="32.76" ry="18" style=""/>
+<text text-anchor="middle" x="194.2" y="-229.8" font-family="Times,serif" font-size="14.00" style="">黏銀絲</text>
+</g>
+<!-- 黏銀絲&#45;&gt;綑起來的金線 -->
+<g id="edge8" class="edge">
+<title style="">黏銀絲-&gt;綑起來的金線</title>
+<path fill="none" stroke="black" d="M194.2,-215.7C194.2,-208.71 194.2,-200.44 194.2,-192.55" style=""/>
+<polygon fill="black" stroke="black" points="197.7,-192.59 194.2,-182.59 190.7,-192.59 197.7,-192.59" style=""/>
+</g>
+<!-- 金屬 -->
+<g id="node10" class="node category">
+<title style="">金屬</title>
+<polygon fill="lightgrey" stroke="black" points="337.39,-234 314.29,-252 268.1,-252 245,-234 268.1,-216 314.29,-216 337.39,-234" style=""/>
+<text text-anchor="middle" x="291.2" y="-229.8" font-family="Times,serif" font-size="14.00" style="">（金屬）</text>
+</g>
+<!-- 金屬&#45;&gt;綑起來的金線 -->
+<g id="edge9" class="edge">
+<title style="">金屬-&gt;綑起來的金線</title>
+<path fill="none" stroke="black" d="M267.72,-216.05C255.98,-207.59 241.57,-197.18 228.61,-187.84" style=""/>
+<polygon fill="black" stroke="black" points="230.88,-185.16 220.73,-182.15 226.79,-190.84 230.88,-185.16" style=""/>
+</g>
+<!-- 植物類 -->
+<g id="node11" class="node category">
+<title style="">植物類</title>
+<polygon fill="lightgrey" stroke="black" points="367.76,-90 340.48,-108 285.92,-108 258.64,-90 285.92,-72 340.48,-72 367.76,-90" style=""/>
+<text text-anchor="middle" x="313.2" y="-85.8" font-family="Times,serif" font-size="14.00" style="">（植物類）</text>
+</g>
+<!-- 植物類&#45;&gt;布料 -->
+<g id="edge10" class="edge">
+<title style="">植物類-&gt;布料</title>
+<path fill="none" stroke="black" d="M313.2,-71.7C313.2,-64.71 313.2,-56.44 313.2,-48.55" style=""/>
+<polygon fill="black" stroke="black" points="316.7,-48.59 313.2,-38.59 309.7,-48.59 316.7,-48.59" style=""/>
+</g>
+<!-- 動物素材 -->
+<g id="node12" class="node category">
+<title style="">動物素材</title>
+<polygon fill="lightgrey" stroke="black" points="511.12,-90 479.66,-108 416.74,-108 385.27,-90 416.74,-72 479.66,-72 511.12,-90" style=""/>
+<text text-anchor="middle" x="448.2" y="-85.8" font-family="Times,serif" font-size="14.00" style="">（動物素材）</text>
+</g>
+<!-- 動物素材&#45;&gt;布料 -->
+<g id="edge11" class="edge">
+<title style="">動物素材-&gt;布料</title>
+<path fill="none" stroke="black" d="M415.86,-72.23C396.6,-62.24 372.03,-49.51 351.76,-39" style=""/>
+<polygon fill="black" stroke="black" points="353.44,-35.92 342.95,-34.43 350.21,-42.14 353.44,-35.92" style=""/>
+</g>
+</g>
+</svg>
