@@ -4,7 +4,7 @@ digraph {
     "噗尼噗尼珠"[color="blue"];
     "失敗作的灰燼"[color=gray50, peripheries=2];
     "舊衣服"[color=gray50, peripheries=2];
-    "魔法草"[color="green",tooltip="採集地：巡禮街道、彩花園、岩地雜木林、大地的傷痕\n怪物掉落：風茄、毒樹根、花妖、金木樹、毒樹根\n商店購買：蔬果店"];
+    "魔法草"[color="green"];
     "火岩石"[color="red"];
     "珀冷石"[color="blue"];
     "雷電礦"[color="green"];
