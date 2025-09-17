@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>A17 蘇菲的鍊金工房 ～不可思議書的鍊金術士～ DX 鍊金術查詢工具</title>
+  <title>A17 & A23 蘇菲的鍊金工房 1 & 2 鍊金術查詢工具</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://unpkg.com/@hpcc-js/wasm@2.20.0/dist/graphviz.umd.js"></script>
   <script src="https://unpkg.com/d3-graphviz@5.6.0/build/d3-graphviz.js"></script>
@@ -34,9 +34,12 @@ c1->d1
 d1->a1
 d2->a1
 }</textarea>
-    <label>
-      <input type="radio" name="dotSource" onclick="loadDotFile()"> 載入 a17.dot
-    </label>
+<label>
+  <input type="radio" name="dotSource" value="a17.dot" onclick="loadDotFile()"> 載入 a17.dot
+</label><br>
+<label>
+  <input type="radio" name="dotSource" value="a23.dot" onclick="loadDotFile()"> 載入 a23.dot
+</label>
 
 <h3>查詢節點</h3>
 <input type="text" id="nodeInput" placeholder="請輸入節點名稱" list="nodeList">
@@ -76,17 +79,26 @@ d2->a1
   <script>
     let graph;
 
-    // 新增：讀取 a17.dot
+// 修改：可以依 radio 選擇載入 a17.dot 或 a23.dot
 async function loadDotFile() {
   try {
-    const response = await fetch("a17.dot");
+    // 取得被選取的 radio
+    const selected = document.querySelector('input[name="dotSource"]:checked');
+    if (!selected) {
+      addMessage("⚠️ 請先選擇要載入的 DOT 檔案");
+      return;
+    }
+    const fileName = selected.value;
+
+    const response = await fetch(fileName);
     if (!response.ok) throw new Error("讀取失敗");
     const text = await response.text();
+
     document.getElementById("dotInput").value = text;
     parseDot(); // 讀進來後立即解析並更新候選清單
-    addMessage("✅ 已載入 a17.dot 並完成解析");
+    addMessage(`✅ 已載入 ${fileName} 並完成解析`);
   } catch (err) {
-    addMessage("❌ 載入 a17.dot 失敗: " + err.message);
+    addMessage(`❌ 載入 DOT 檔案失敗: ${err.message}`);
   }
 }
 
@@ -372,6 +384,7 @@ function handlePathClick(payload) {
 
       graphviz
         .graphviz()
+        .fit(true) // ★ 自動縮放整張圖
         .transition(d3.transition().duration(500))
         .renderDot(dot)
         .on("end", enableZoom);
